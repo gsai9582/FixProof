@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: fixproof-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r backend/requirements.txt && python backend/generate_demo_assets.py && python backend/app/seed.py"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT --app-dir backend"
+    envVars:
+      - key: DATABASE_URL
+        value: "sqlite:///./fixproof.db"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: "gemini-1.5-flash"
+      - key: STORAGE_BACKEND
+        value: "local"
+      - key: CORS_ORIGINS
+        value: "*"
